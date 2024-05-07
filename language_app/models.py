@@ -8,3 +8,8 @@ class User(models.Model):
     password = models.CharField(max_length=30)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+
+class Words(models.Model):
+    english = models.CharField(max_length=30)
+    turkish = models.CharField(max_length=30)
