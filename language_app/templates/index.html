@@ -1,10 +1,41 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language</title>
+    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "static/img/flag.png" %}">
+    <style>
+        body {
+            background-image: url("{% static 'img/bigbenright.jpg' %}");
+        }
+        .soltaraf {
+            background-image: url("{% static 'img/students.png' %}");
+        }
+    </style>
 </head>
-<body>
-index
+<body   >
+<div class="anakutu">
+    <div class="katman"></div>
+    <div class="soltaraf"></div>
+    <div class="sagtaraf">
+        <h1>Sign In To Language App!</h1>
+        <form>
+            {% csrf_token %}
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+            <br>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <br>
+            <button type="submit">Sign In</button>
+            <button type="button">Sign Up Now</button>
+            <a href="">Forgot Password</a>
+        </form>
+    </div>
+</div>
+<script src="{% static "js/script.js" %}"></script>
 </body>
 </html>
