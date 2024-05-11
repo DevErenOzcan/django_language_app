@@ -6,16 +6,14 @@ $(document).ready(function() {
 
     // Form verilerini al
     var email = $('#email').val();
-    var password = $('#password').val();
 
     // Ajax isteğini yap
     $.ajax({
       type: 'POST',
-      url: '/login/',
+      url: '/forgot_password/',
       headers: { "X-CSRFToken": csrftoken }, // CSRF token'ini istek başlığı olarak ekleyin
       data: {
         'email': email,
-        'password': password
       },
       success: function(response) {
         console.log(response); // Başarılı yanıtı konsola yazdır
