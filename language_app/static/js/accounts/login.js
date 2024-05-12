@@ -18,12 +18,15 @@ $(document).ready(function() {
         'password': password
       },
       success: function(response, status, xhr){
-        // Başarılı yanıt kontrolü
-        if (xhr.getResponseHeader('content-type').indexOf('text/html') !== -1) {
-          // Yönlendirme yapıldıysa sayfayı yeniden yükle
-          window.location.replace('/language_app/');
+        const contentType = xhr.getResponseHeader("Content-Type");
+        if (contentType.includes("text/html")) {
+          // Eğer yanıt HTML ise, mevcut sekmede aç
+                document.open();
+                document.write(xhr.responseText);
+                document.close();
         } else {
-          console.log(response); // Başarılı yanıtı konsola yazdır
+            // Farklı bir içerik tipi ise, konsola yazdır
+            console.log(xhr.responseText);
         }
 
       },

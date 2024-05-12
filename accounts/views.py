@@ -1,9 +1,10 @@
 import json
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from language_app.models import Words, UserWords
 from .forms import LoginForm, RegisterForm, ForgotPasswordForm
 
 
@@ -11,7 +12,7 @@ def index(request):
     return render(request, "accounts/index.html")
 
 
-def login_page(request):
+def login_view(request):
     if request.method == "POST":
         response_data = {}
         form = LoginForm(request.POST)
@@ -31,7 +32,12 @@ def login_page(request):
         return render(request, "accounts/login.html")
 
 
-def register_page(request):
+def logout_view(request):
+    logout(request)
+    return redirect("index")
+
+
+def register_view(request):
     if request.method == "POST":
         response_data = {}
         form = RegisterForm(request.POST)
@@ -41,9 +47,16 @@ def register_page(request):
             password = form.cleaned_data.get("password")
 
             try:
-                user = User.objects.create(username=username, password=password)
-                user.email = email
+                user = User.objects.create(username=username, email=email)
+                user.set_password(password)
                 user.save()
+
+                # kullanıcıya ait userwords kelimelerini tabloya ekle
+                words = Words.objects.all()
+                for word in words:
+                    userwords = UserWords.objects.create(user_id=user.id, word_id=word.id)
+                    userwords.save()
+
                 response_data["error"] = False
                 response_data["result"] = "Kullanıcı başarı ile oluşturuldu"
             except Exception as e:
@@ -58,7 +71,7 @@ def register_page(request):
         return render(request, "accounts/register.html")
 
 
-def forgot_password_page(request):
+def forgot_password_view(request):
     if request.method == "POST":
         response_data = {}
         form = ForgotPasswordForm(request.POST)
