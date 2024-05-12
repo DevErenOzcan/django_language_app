@@ -1,17 +1,11 @@
 from django.db import models
-
-
-class User(models.Model):
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    email = models.EmailField()
-    password = models.CharField(max_length=30)
+from django.contrib.auth.models import User
 
 
 class Words(models.Model):
     english = models.CharField(max_length=30)
     turkish = models.CharField(max_length=30)
-    img = models.ImageField(upload_to='images/')
+    img = models.ImageField(upload_to='words_imgs/')
 
 
 class UserWords(models.Model):

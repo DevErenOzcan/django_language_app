@@ -5,18 +5,27 @@ $(document).ready(function() {
     var csrftoken = getCookie('csrftoken');
 
     // Form verilerini al
-    var email = $('#email').val();
+    var username = $('#username').val();
+    var password = $('#password').val();
 
     // Ajax isteğini yap
     $.ajax({
       type: 'POST',
-      url: '/forgot_password/',
+      url: '/login/',
       headers: { "X-CSRFToken": csrftoken }, // CSRF token'ini istek başlığı olarak ekleyin
       data: {
-        'email': email,
+        'username': username,
+        'password': password
       },
-      success: function(response) {
-        console.log(response); // Başarılı yanıtı konsola yazdır
+      success: function(response, status, xhr){
+        // Başarılı yanıt kontrolü
+        if (xhr.getResponseHeader('content-type').indexOf('text/html') !== -1) {
+          // Yönlendirme yapıldıysa sayfayı yeniden yükle
+          window.location.replace('/language_app/');
+        } else {
+          console.log(response); // Başarılı yanıtı konsola yazdır
+        }
+
       },
       error: function(xhr, status, error) {
         console.error(error); // Hata durumunda konsola yazdır

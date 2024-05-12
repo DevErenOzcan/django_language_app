@@ -1,4 +1,2 @@
 .idea
 .venv
-language_app/migrationsmigrations/
-language_app/!migrations/__init__.py

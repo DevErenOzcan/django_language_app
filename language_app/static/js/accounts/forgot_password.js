@@ -5,21 +5,15 @@ $(document).ready(function() {
     var csrftoken = getCookie('csrftoken');
 
     // Form verilerini al
-    var first_name = $('#first_name').val();
-    var last_name = $('#last_name').val();
-    var email = $('#email').val();
-    var password = $('#password').val();
+    var username = $('#username').val();
 
     // Ajax isteğini yap
     $.ajax({
       type: 'POST',
-      url: '/register/',
+      url: '/forgot_password/',
       headers: { "X-CSRFToken": csrftoken }, // CSRF token'ini istek başlığı olarak ekleyin
       data: {
-        'first_name': first_name,
-        'last_name': last_name,
-        'email': email,
-        'password': password
+        'username': username,
       },
       success: function(response) {
         console.log(response); // Başarılı yanıtı konsola yazdır
