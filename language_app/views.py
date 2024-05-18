@@ -1,11 +1,12 @@
 import json
 import random
+from datetime import datetime, timedelta
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from language_app.forms import WordsForm
-from .models import UserWords, Words
+from .models import UserWords, Words, QuestionCount
 
 
 @login_required(login_url=reverse_lazy("login"))
@@ -19,17 +20,45 @@ def home_view(request):
 @login_required(login_url=reverse_lazy("login"))
 def quiz_view(request):
     if request.method == "POST":
+        now = datetime.now()
+        one_day_ago = now - timedelta(days=1)
+        one_week_ago = now - timedelta(days=7)
+        one_month_ago = now - timedelta(days=30)
+        tree_month_ago = now - timedelta(days=90)
+        six_month_ago = now - timedelta(days=180)
+        one_year_ago = now - timedelta(days=365)
+
+        user = request.user
         words = []
         word_count = 0
+        question_count = QuestionCount.objects.get(id=user.id)
         unique_words = set()  # Using a set to keep track of unique words
-        all_words = list(Words.objects.all())  # Fetch all words from the database
-        while word_count < 6 and len(unique_words) < len(all_words):
-            random_word = random.choice(all_words)
+
+        userwords = []
+        all_userwords = list(UserWords.objects.filter(user_id=user.id, is_learned=0))  # Fetch all words from the database
+        for all_userword in all_userwords:
+            if all_userword.corect_count == 0:
+                userwords.append(Words.objects.get(id=all_userword.word_id))
+            if all_userword.corect_count == 1 and all_userword.updated_date < one_day_ago:
+                userwords.append(Words.objects.get(id=all_userword.word_id))
+            if all_userword.corect_count == 2 and all_userword.updated_date < one_week_ago:
+                userwords.append(Words.objects.get(id=all_userword.word_id))
+            if all_userword.corect_count == 3 and all_userword.updated_date < one_month_ago:
+                userwords.append(Words.objects.get(id=all_userword.word_id))
+            if all_userword.corect_count == 4 and all_userword.updated_date < tree_month_ago:
+                userwords.append(Words.objects.get(id=all_userword.word_id))
+            if all_userword.corect_count == 5 and all_userword.updated_date < six_month_ago:
+                userwords.append(Words.objects.get(id=all_userword.word_id))
+            if all_userword.corect_count == 6 and all_userword.updated_date < one_year_ago:
+                userwords.append(Words.objects.get(id=all_userword.word_id))
+
+        while word_count < question_count.ask_count and len(unique_words) < len(userwords):
+            random_word = random.choice(userwords)
             if random_word.english not in unique_words:
                 word_count += 1
                 unique_words.add(random_word.english)
                 choises = [random_word.turkish]
-                selected_choises = random.sample(all_words, 4)
+                selected_choises = random.sample(userwords, 4)
                 for selected_choise in selected_choises:
                     choises.append(selected_choise.turkish)
 

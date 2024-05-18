@@ -19,3 +19,8 @@ class UserWords(models.Model):
 
     class Meta:
         unique_together = ('user', 'word')
+
+
+class QuestionCount(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    ask_count = models.IntegerField(default=0)

@@ -6,7 +6,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 
-from language_app.models import Words, UserWords
+from language_app.models import Words, UserWords, QuestionCount
 from .forms import LoginForm, RegisterForm, ForgotPasswordForm
 
 
@@ -58,6 +58,10 @@ def register_view(request):
                 for word in words:
                     userwords = UserWords.objects.create(user_id=user.id, word_id=word.id)
                     userwords.save()
+
+                # kullanıcıya ait question count u tabloya ekle
+                question_count = QuestionCount.objects.create(user_id=user.id, ask_count=10)
+                question_count.save()
 
                 response_data["error"] = False
                 response_data["result"] = "Kullanıcı başarı ile oluşturuldu"
