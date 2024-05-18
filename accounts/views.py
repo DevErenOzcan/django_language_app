@@ -4,6 +4,8 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
+from django.urls import reverse
+
 from language_app.models import Words, UserWords
 from .forms import LoginForm, RegisterForm, ForgotPasswordForm
 
@@ -26,7 +28,7 @@ def login_view(request):
                 response_data["result"] = "Email or password is wrong"
             else:
                 login(request, user)
-                return redirect("home")
+                response_data["redirect_url"] = reverse("home")
         return HttpResponse(json.dumps(response_data), content_type="application/json")
     else:
         return render(request, "accounts/login.html")
