@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 class Words(models.Model):
-    english = models.CharField(max_length=30)
+    english = models.CharField(max_length=30, unique=True)
     turkish = models.CharField(max_length=30)
     in_sentence = models.CharField(max_length=200)
     img = models.ImageField(upload_to='words_imgs/')
