@@ -1,30 +1,31 @@
-$(document).ready(function() {
-  // Login butonuna tıklanınca
-  $('button[type="button"]').click(function() {
-    // CSRF token'ini al
+document.getElementById("quizButton").addEventListener("click", function() {
+    window.location.href = "http://localhost:8080/language_app/quiz/"; // Buraya gitmek istediğiniz URL'yi yazın
+});
+
+document.getElementById("addWordButton").addEventListener("click", function() {
+    window.location.href = "http://localhost:8080/language_app/add_word/"; // Buraya gitmek istediğiniz URL'yi yazın
+});
+
+document.getElementById("settingsButton").addEventListener("click", function() {
+    window.location.href = "http://localhost:8080/language_app/settings/"; // Buraya gitmek istediğiniz URL'yi yazın
+});
+
+document.getElementById("analiseReportButton").addEventListener("click", function() {
     var csrftoken = getCookie('csrftoken');
 
-    var status1 = "get_analise_report";
-
-    // Ajax isteğini yap
     $.ajax({
       type: 'POST',
       url: '/language_app/',
-      headers: { "X-CSRFToken": csrftoken }, // CSRF token'ini istek başlığı olarak ekleyin
-      data: {
-        'status': status1,
-      },
-      success: function(response) {
-        console.log(response); // Başarılı yanıtı konsola yazdır
+      headers: { "X-CSRFToken": csrftoken }, // CSRF token'ını istek başlığı olarak ekleyin
+      success: function(response){
+          console.log(response);
       },
       error: function(xhr, status, error) {
         console.error(error); // Hata durumunda konsola yazdır
       }
     });
-  });
 });
 
-// CSRF token'ini çerezden alma fonksiyonu
 function getCookie(name) {
   var cookieValue = null;
   if (document.cookie && document.cookie !== '') {
