@@ -28,7 +28,7 @@ def login_view(request):
                 response_data["result"] = "Email or password is wrong"
             else:
                 login(request, user)
-                response_data["redirect_url"] = reverse("home")
+                response_data["redirect_url"] = reverse("index")
         return HttpResponse(json.dumps(response_data), content_type="application/json")
     else:
         return render(request, "accounts/login.html")
