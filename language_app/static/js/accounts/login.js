@@ -18,8 +18,12 @@ $(document).ready(function() {
         'password': password
       },
       success: function(response, status, xhr){
-          window.location.href = response.redirect_url;
-
+          if (response.error) {
+            alert(response.result);
+          }
+          else {
+            window.location.href = response.redirect_url
+          }
       },
       error: function(xhr, status, error) {
         console.error(error); // Hata durumunda konsola yazdır
