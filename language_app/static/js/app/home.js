@@ -10,7 +10,11 @@ document.getElementById("settingsButton").addEventListener("click", function() {
     window.location.href = "http://localhost:8080/language_app/settings/"; // Buraya gitmek istediğiniz URL'yi yazın
 });
 
-document.getElementById("analiseReportButton").addEventListener("click", function() {
+document.getElementById("logoutButton").addEventListener("click", function() {
+    window.location.href = "http://localhost:8080/logout/"; // Buraya gitmek istediğiniz URL'yi yazın
+});
+
+document.getElementById("analyzeReportButton").addEventListener("click", function() {
     var csrftoken = getCookie('csrftoken');
 
     $.ajax({
