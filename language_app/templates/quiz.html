@@ -5,10 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz</title>
+    <link href="{% static 'css/quizstyle.css' %}" rel="stylesheet" />
 </head>
 <body>
     <div id="quiz-container">
         <form id="quiz-form">
+            {% csrf_token %}
             {% for word in words %}
             <div class="question">
                 <p>{{ word.question }}</p>

@@ -5,9 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add Word</title>
+    <link href="{% static 'css/wordstyle.css' %}" rel="stylesheet" />
 </head>
 <body>
-    <h1>Add Word</h1>
+    <div class="katman"></div>
+    <h1>Add New Word</h1>
     <form id="add-word-form" method="post">
         {% csrf_token %}
         {{ form.as_p }}
