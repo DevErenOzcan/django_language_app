@@ -11,31 +11,7 @@ from .models import UserWords, Words, QuestionCount
 
 @login_required(login_url=reverse_lazy("login"))
 def home_view(request):
-    if request.method == "POST":
-        user = request.user
-        userwords = UserWords.objects.filter(user_id=user.id)
-        analise_datas = []
-        total_percent = []
-        for userword in userwords:
-            analise_data = {}
-            word = Words.objects.get(id=userword.word_id)
-            analise_data["english"] = word.english
-            analise_data["turkish"] = word.turkish
-            analise_data["in_sentence"] = word.in_sentence
-            analise_data["corect_count"] = userword.corect_count
-            analise_data["is_learned"] = userword.is_learned
-
-            percent = (userword.corect_count / 7) * 100
-            total_percent.append(percent)
-            analise_data["percent"] = percent
-
-            analise_datas.append(analise_data)
-        total_percent = sum(total_percent) / len(total_percent)
-        analise_datas.append({"total_percent": total_percent})
-        return HttpResponse(json.dumps(analise_datas), content_type="application/json")
-
-    else:
-        return render(request, "home.html")
+    return render(request, "home.html")
 
 
 @login_required(login_url=reverse_lazy("login"))
@@ -172,3 +148,28 @@ def settings_view(request):
     else:
         question_count = QuestionCount.objects.get(id=user.id)
         return render(request, "settings.html", {"ask_count": question_count.ask_count})
+
+
+@login_required(login_url=reverse_lazy("login"))
+def get_analize_report(request):
+    user = request.user
+    userwords = UserWords.objects.filter(user_id=user.id)
+    analise_datas = []
+    total_percent = []
+    for userword in userwords:
+        analise_data = {}
+        word = Words.objects.get(id=userword.word_id)
+        analise_data["english"] = word.english
+        analise_data["turkish"] = word.turkish
+        analise_data["in_sentence"] = word.in_sentence
+        analise_data["corect_count"] = userword.corect_count
+        analise_data["is_learned"] = userword.is_learned
+
+        percent = (userword.corect_count / 7) * 100
+        total_percent.append(percent)
+        analise_data["percent"] = percent
+
+        analise_datas.append(analise_data)
+    total_percent = sum(total_percent) / len(total_percent)
+    analise_datas.append({"total_percent": total_percent})
+    return render(request, "analize_report.html", {"analise_datas": analise_datas})

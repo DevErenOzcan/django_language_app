@@ -1,15 +1,3 @@
-  document.addEventListener('DOMContentLoaded', (event) => {
-        document.getElementById('analyzeReportButton').addEventListener('click', () => {
-            const reportContent = document.getElementById('reportContent');
-            reportContent.innerText = "This is your report content.";
-            document.getElementById('analyzeReportSection').style.display = 'flex';
-        });
-
-        document.getElementById('closeReportButton').addEventListener('click', () => {
-            document.getElementById('analyzeReportSection').style.display = 'none';
-        });
-    });
-
 document.getElementById("quizButton").addEventListener("click", function () {
     window.location.href = "http://localhost:8080/language_app/quiz/"; // Buraya gitmek istediğiniz URL'yi yazın
 });
@@ -27,33 +15,5 @@ document.getElementById("logoutButton").addEventListener("click", function () {
 });
 
 document.getElementById("analyzeReportButton").addEventListener("click", function () {
-    var csrftoken = getCookie('csrftoken');
-
-    $.ajax({
-        type: 'POST',
-        url: '/language_app/',
-        headers: {"X-CSRFToken": csrftoken}, // CSRF token'ını istek başlığı olarak ekleyin
-        success: function (response) {
-            console.log(response);
-        },
-        error: function (xhr, status, error) {
-            console.error(error); // Hata durumunda konsola yazdır
-        }
-    });
+    window.location.href = "http://localhost:8080/language_app/analyze_report/"; // Buraya gitmek istediğiniz URL'yi yazın
 });
-
-function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = cookies[i].trim();
-            // Çerez adı csrftoken ise, değerini al
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
