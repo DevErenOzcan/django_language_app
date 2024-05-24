@@ -167,7 +167,7 @@ def get_analize_report(request):
 
         percent = (userword.corect_count / 7) * 100
         total_percent.append(percent)
-        analise_data["percent"] = percent
+        analise_data["percent"] = float("{:.2f}".format(percent))
 
         analise_datas.append(analise_data)
     total_percent = sum(total_percent) / len(total_percent)
