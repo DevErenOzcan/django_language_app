@@ -8,13 +8,14 @@
     <link href="{% static 'css/quizstyle.css' %}" rel="stylesheet" />
 </head>
 <body>
-    <div id="quiz-container">
+    <div id="quiz-container" data-total-questions="{{ words|length }}">
         <form id="quiz-form">
             {% csrf_token %}
             {% for word in words %}
             <div class="question">
                 <p>{{ word.question }}</p>
-                <input type="hidden" name="questions[]" value="{{ word.question }}">
+                <img src="{% static word.img %}" alt="Question Image">
+                <input type="hidden" name="question{{ forloop.counter }}" value="{{ word.question }}">
                 <label><input type="radio" name="answers{{ forloop.counter }}" value="{{ word.choices0 }}"> {{ word.choices0 }}</label><br>
                 <label><input type="radio" name="answers{{ forloop.counter }}" value="{{ word.choices1 }}"> {{ word.choices1 }}</label><br>
                 <label><input type="radio" name="answers{{ forloop.counter }}" value="{{ word.choices2 }}"> {{ word.choices2 }}</label><br>

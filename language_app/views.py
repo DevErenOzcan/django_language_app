@@ -1,6 +1,6 @@
 import json
 import random
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.shortcuts import render
@@ -44,10 +44,11 @@ def quiz_view(request):
     if request.method == "POST":
         correct_answers = []
         wrong_answers = []
-        answer_datas = json.loads(request.POST.get("answer_data"))
+        data = json.loads(request.body)
+        answer_datas = data.get('answer_data', [])
         for answer_data in answer_datas:
-            word = Words.objects.get(english=answer_data.question)
-            if answer_data.answer == word.turkish:
+            word = Words.objects.get(english=answer_data.get('question'))
+            if answer_data.get('answer') == word.turkish:
                 correct_answers.append(UserWords.objects.get(user_id=user.id, word_id=word.id))
             else:
                 wrong_answers.append(UserWords.objects.get(user_id=user.id, word_id=word.id))
@@ -66,11 +67,11 @@ def quiz_view(request):
                             content_type="application/json")
 
     else:
-        now = datetime.now()
+        now = datetime.now(timezone.utc)
         one_day_ago = now - timedelta(days=1)
         one_week_ago = now - timedelta(days=7)
         one_month_ago = now - timedelta(days=30)
-        tree_month_ago = now - timedelta(days=90)
+        three_month_ago = now - timedelta(days=90)  # Fixed typo from tree_month_ago
         six_month_ago = now - timedelta(days=180)
         one_year_ago = now - timedelta(days=365)
 
@@ -80,8 +81,7 @@ def quiz_view(request):
         unique_words = set()  # Using a set to keep track of unique words
 
         userwords = []
-        all_userwords = list(
-            UserWords.objects.filter(user_id=user.id, is_learned=0))  # Fetch all words from the database
+        all_userwords = UserWords.objects.filter(user_id=user.id, is_learned=0)  # Fetch all words from the database
         for all_userword in all_userwords:
             if all_userword.corect_count == 0:
                 userwords.append(Words.objects.get(id=all_userword.word_id))
@@ -91,7 +91,7 @@ def quiz_view(request):
                 userwords.append(Words.objects.get(id=all_userword.word_id))
             if all_userword.corect_count == 3 and all_userword.updated_date < one_month_ago:
                 userwords.append(Words.objects.get(id=all_userword.word_id))
-            if all_userword.corect_count == 4 and all_userword.updated_date < tree_month_ago:
+            if all_userword.corect_count == 4 and all_userword.updated_date < three_month_ago:
                 userwords.append(Words.objects.get(id=all_userword.word_id))
             if all_userword.corect_count == 5 and all_userword.updated_date < six_month_ago:
                 userwords.append(Words.objects.get(id=all_userword.word_id))
@@ -104,14 +104,15 @@ def quiz_view(request):
                 word_count += 1
                 unique_words.add(random_word.english)
                 choises = [random_word.turkish]
-                selected_choises = random.sample(userwords, 4)
+                # Ensure choices are unique and do not duplicate the correct answer
+                selected_choises = random.sample([w for w in userwords if w.id != random_word.id], 4)
                 for selected_choise in selected_choises:
                     choises.append(selected_choise.turkish)
 
                 random.shuffle(choises)
                 question_data = {
                     'question': random_word.english,
-                    # TODO: question resmi eklenecek
+                    'img': random_word.img.url if random_word.img else None,  # Include image if available
                     'choices0': choises[0],
                     'choices1': choises[1],
                     'choices2': choises[2],
@@ -119,6 +120,7 @@ def quiz_view(request):
                     'choices4': choises[4],
                 }
                 words.append(question_data)
+
         return render(request, "quiz.html", {"words": words})
 
 
