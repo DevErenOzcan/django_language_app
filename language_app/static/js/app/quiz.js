@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(response => response.json())
         .then(data => {
             // Handle response data
-            console.log(data);
+            alert(data.message)
             // You can update UI based on the response if needed
         })
         .catch(error => {
