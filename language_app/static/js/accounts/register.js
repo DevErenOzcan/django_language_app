@@ -20,7 +20,7 @@ $(document).ready(function() {
         'password': password
       },
       success: function(response) {
-        console.log(response); // Başarılı yanıtı konsola yazdır
+        alert(response.result); // Başarılı mesajını göster
       },
       error: function(xhr, status, error) {
         console.error(error); // Hata durumunda konsola yazdır
