@@ -14,7 +14,25 @@
         <link href="https://fonts.googleapis.com/css?family=Varela+Round" rel="stylesheet" />
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
         <!-- Core theme CSS (includes Bootstrap)-->
+
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+        <style>
+            #analyzeReportSection {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.8); /* Yarı şeffaf siyah arkaplan */
+                color: white; /* Metin rengi beyaz */
+                z-index: 9999; /* En üstte görünmesi için yüksek z-index değeri */
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                padding: 20px; /* İçerik biraz boşluk bırak */
+            }
+        </style>
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -47,6 +65,13 @@
                 </div>
             </div>
         </header>
+        <div id="analyzeReportSection">
+            <!-- Bu alana analiz raporunuz gelecek -->
+            <h3>Analyze Report</h3>
+            <p id="reportContent">Your report will be displayed here.</p>
+            <button id="closeReportButton" class="btn btn-primary">Close</button>
+        </div>
+
         <!-- Bootstrap core JS-->
         <script src="{% static 'js/base/bootstrap.bundle.min.js' %}"></script>
         <script src="{% static 'js/base/jquery-3.6.0.min.js' %}"></script>
