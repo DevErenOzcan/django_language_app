@@ -1,9 +1,9 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('quiz-form');
     const quizContainer = document.getElementById('quiz-container');
     const totalQuestions = quizContainer.getAttribute('data-total-questions'); // Get the total number of questions
 
-    form.addEventListener('submit', function(event) {
+    form.addEventListener('submit', function (event) {
         event.preventDefault(); // Prevent default form submission
 
         // Collect form data
@@ -22,24 +22,29 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         }
 
+
         // Send answer data to server
         fetch('/language_app/quiz/', {
             method: 'POST',
-            body: JSON.stringify({ answer_data: answerData }),
+            body: JSON.stringify({answer_data: answerData}),
             headers: {
                 'Content-Type': 'application/json',
                 'X-CSRFToken': getCookie('csrftoken') // Include CSRF token
             }
         })
-        .then(response => response.json())
-        .then(data => {
-            // Handle response data
-            alert(data.message)
-            // You can update UI based on the response if needed
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+            .then(response => response.json())
+            .then(data => {
+                // Handle response data
+                var message = '';
+                for (var key in data) {
+                    message += key + ': ' + data[key] + '\n';
+                }
+                alert(message);
+                // You can update UI based on the response if needed
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
     });
 
     // Function to get CSRF token from cookie
